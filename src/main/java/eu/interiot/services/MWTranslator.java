@@ -1,13 +1,15 @@
 package eu.interiot.services;
 
-import org.apache.jena.rdf.model.Model;
-
 import eu.interiot.message.Message;
 import eu.interiot.message.MessageMetadata;
 import eu.interiot.message.MessagePayload;
 import eu.interiot.message.managers.URI.URIManagerMessageMetadata;
 import eu.interiot.message.metadata.PlatformMessageMetadata;
 import eu.interiot.services.syntax.FIWAREv2Translator;
+
+import org.apache.jena.rdf.model.Model;
+
+
 import spark.Service;
 
 
@@ -57,7 +59,7 @@ public class MWTranslator {
 	         }
             
 	            
-	         response.header("Content-Type", "application/json;charset=UTF-8");
+	        response.header("Content-Type", "application/json;charset=UTF-8");
 	         response.status(200);
 	         return platformResponse;
         });
