@@ -49,7 +49,7 @@ public class MWTranslator {
 		         callbackMessage.setPayload(messagePayload);
 		         
 		         System.out.println(callbackMessage.serializeToJSONLD());
-		         platformResponse = callbackMessage.toString();
+		         platformResponse = callbackMessage.serializeToJSONLD();
 		
 	         } catch(Exception e){
 	        	 response.status(400);
