@@ -7,8 +7,13 @@ import eu.interiot.message.managers.URI.URIManagerMessageMetadata;
 import eu.interiot.message.metadata.PlatformMessageMetadata;
 import eu.interiot.services.syntax.FIWAREv2Translator;
 
-import org.apache.jena.rdf.model.Model;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import spark.Service;
 
@@ -17,7 +22,7 @@ public class MWTranslator {
 
     private int port;
     private Service spark;
-
+    private final Logger logger = LoggerFactory.getLogger(MWTranslator.class);
     
     public MWTranslator(int port) {
         this.port = port;
@@ -27,39 +32,54 @@ public class MWTranslator {
     	
         spark = Service.ignite().port(port);
         
+        // Translate Fiware data to intermw JSON-LD
         spark.post("translate/fiware", (request, response) -> {
-        	// Translate fiware data to intermw JSON-LD
         	
             String platformResponse="";
-                  
-            Message callbackMessage = new Message();
+            
 	         try{
-				 // Metadata
-		         PlatformMessageMetadata metadata = new MessageMetadata().asPlatformMessageMetadata();
-		         metadata.initializeMetadata();
-		         metadata.addMessageType(URIManagerMessageMetadata.MessageTypesEnum.OBSERVATION);
-//		         metadata.setSenderPlatformId(new EntityID(platform.getPlatformId()));
-//		         metadata.setConversationId(conversationId);
-		         callbackMessage.setMetadata(metadata);
-		         
+				 // Translate data to JSON-LD
 		         String body = request.body();
+		         logger.debug("Translate data from Fiware...  " + body);
 		         FIWAREv2Translator translator2 = new FIWAREv2Translator();
 		         Model transformedModel = translator2.toJenaModelTransformed(body);
 		
-		         //Finish creating the message
-		         MessagePayload messagePayload = new MessagePayload(transformedModel);
-		         callbackMessage.setPayload(messagePayload);
-		         
-		         System.out.println(callbackMessage.serializeToJSONLD());
-		         platformResponse = callbackMessage.serializeToJSONLD();
+		         // Create Inter-IoT message
+		 	     platformResponse = createObservationMessage(transformedModel);
+		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
 	             return e.getMessage();
 	         }
-            
 	            
-	        response.header("Content-Type", "application/json;charset=UTF-8");
+	         response.header("Content-Type", "application/json;charset=UTF-8");
+	         response.status(200);
+	         return platformResponse;
+        });
+        
+        // Translate universAAL data to intermw JSON-LD
+        spark.post("translate/universaal", (request, response) -> {	
+        	
+            String platformResponse="";
+            
+	         try{
+		         // Transform data to JSON-LD
+		         String event = request.body();
+		         logger.debug("Translate data from universAAL...  " + event);
+		 	     Model eventModel = ModelFactory.createDefaultModel();
+		 	     eventModel.read(new ByteArrayInputStream(event.getBytes()), null, "TURTLE");
+		 	     
+		 	     // Create Inter-IoT message
+		 	     platformResponse = createObservationMessage(eventModel);
+		         System.out.println(platformResponse);
+		
+	         } catch(Exception e){
+	        	 response.status(400);
+	             return e.getMessage();
+	         }
+                
+	         response.header("Content-Type", "application/json;charset=UTF-8");
 	         response.status(200);
 	         return platformResponse;
         });
@@ -75,7 +95,24 @@ public class MWTranslator {
     	new MWTranslator(4568).start();
     }
 
-
+    private String createObservationMessage(Model model) throws IOException{
+    	
+    	Message callbackMessage = new Message();
+    	// Metadata
+        PlatformMessageMetadata metadata = new MessageMetadata().asPlatformMessageMetadata();
+        metadata.initializeMetadata();
+        metadata.addMessageType(URIManagerMessageMetadata.MessageTypesEnum.OBSERVATION);
+//        metadata.setSenderPlatformId(new EntityID(platform.getPlatformId()));
+//        metadata.setConversationId(conversationId);
+        callbackMessage.setMetadata(metadata);
+        
+        //Finish creating the message
+        MessagePayload messagePayload = new MessagePayload(model);
+        callbackMessage.setPayload(messagePayload);    
+    	
+    	return callbackMessage.serializeToJSONLD();
+    	
+    }
  
     
 }
