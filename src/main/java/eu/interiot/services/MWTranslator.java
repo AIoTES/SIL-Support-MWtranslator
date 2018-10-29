@@ -6,6 +6,7 @@ import eu.interiot.message.MessagePayload;
 import eu.interiot.message.managers.URI.URIManagerMessageMetadata;
 import eu.interiot.message.metadata.PlatformMessageMetadata;
 import eu.interiot.services.syntax.FIWAREv2Translator;
+import eu.interiot.services.syntax.Sofia2Translator;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -84,6 +85,31 @@ public class MWTranslator {
 	         return platformResponse;
         });
         
+        // Translate SOFIA2 data to intermw JSON-LD
+        spark.post("translate/sofia", (request, response) -> {
+        	
+            String platformResponse="";
+            
+	         try{
+				 // Translate data to JSON-LD
+		         String body = request.body();
+		         logger.debug("Translate data from SOFIA2...  " + body);
+		         Sofia2Translator translator2 = new Sofia2Translator();
+		         Model transformedModel = translator2.toJenaModelTransformed(body);
+		
+		         // Create Inter-IoT message
+		 	     platformResponse = createObservationMessage(transformedModel);
+		         System.out.println(platformResponse);
+		
+	         } catch(Exception e){
+	        	 response.status(400);
+	             return e.getMessage();
+	         }
+	            
+	         response.header("Content-Type", "application/json;charset=UTF-8");
+	         response.status(200);
+	         return platformResponse;
+        });
 
     }
 
