@@ -12,11 +12,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import spark.Service;
 
@@ -224,9 +231,16 @@ public class MWTranslator {
         
         //Finish creating the message
         MessagePayload messagePayload = new MessagePayload(model);
-        callbackMessage.setPayload(messagePayload);    
-    	
-    	return callbackMessage.serializeToJSONLD();
+        callbackMessage.setPayload(messagePayload);  
+        
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonMessage = (ObjectNode) mapper.readTree(callbackMessage.serializeToJSONLD());
+        ObjectNode context = (ObjectNode) jsonMessage.get("@context");
+        context.put("@vocab", "http://inter-iot.eu/message/");
+        jsonMessage.set("@context", context);
+        
+ //   	return callbackMessage.serializeToJSONLD();
+        return jsonMessage.toString();
     	
     }
  
