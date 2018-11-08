@@ -236,10 +236,9 @@ public class MWTranslator {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode jsonMessage = (ObjectNode) mapper.readTree(callbackMessage.serializeToJSONLD());
         ObjectNode context = (ObjectNode) jsonMessage.get("@context");
+        context.remove("msg");
         context.put("@vocab", "http://inter-iot.eu/message/");
         jsonMessage.set("@context", context);
-        
- //   	return callbackMessage.serializeToJSONLD();
         return jsonMessage.toString();
     	
     }
