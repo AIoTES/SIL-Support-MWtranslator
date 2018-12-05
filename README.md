@@ -26,10 +26,20 @@ curl -X POST \
 '
 
 
-POST http://localhost:4568/translate/fiware
-POST http://localhost:4568/translate/sofia
-POST http://localhost:4568/translate/universaal
+TRANSLATION TO INTER-IOT FORMAT:
 
-POST http://localhost:4568/formatx/fiware
-POST http://localhost:4568/formatx/sofia
-POST http://localhost:4568/formatx/universaal
+* POST http://localhost:4568/translate/fiware
+
+* POST http://localhost:4568/translate/sofia
+
+* POST http://localhost:4568/translate/universaal
+
+
+
+TRANSLATION FROM INTER-IOT FORMAT:
+
+* POST http://localhost:4568/formatx/fiware
+
+* POST http://localhost:4568/formatx/sofia
+
+* POST http://localhost:4568/formatx/universaal
