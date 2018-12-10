@@ -215,7 +215,11 @@ public class MWTranslator {
     }
 
     public static void main(String[] args) throws Exception {
-    	new MWTranslator(4568).start();
+    	int port = 4568;
+    	if (args.length > 0){
+    		port = Integer.parseInt(args[0]);
+    	}
+    	new MWTranslator(port).start();
     }
 
     private String createObservationMessage(Model model) throws IOException{

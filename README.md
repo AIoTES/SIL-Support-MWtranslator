@@ -1,5 +1,18 @@
 # mwtranslator
 
+
+# JVM
+
+
+mvn clean compile assembly:single
+
+
+java -jar target\MWTranslator-0.0.1-SNAPSHOT-jar-with-dependencies.jar {TCP port}
+
+
+# Docker
+
+
 docker build -t giantswarm/sparkexample .
 
 docker run -d -p 4568:4568 giantswarm/sparkexample
@@ -24,6 +37,9 @@ curl -X POST \
     "type": "Room"
 }
 '
+
+
+# API
 
 
 TRANSLATION TO INTER-IOT FORMAT:
