@@ -47,13 +47,12 @@ public class MWTranslator {
 	         try{
 				 // Translate data to JSON-LD
 		         String body = request.body();
-		         logger.debug("Translate data from Fiware...  " + body);
+		         logger.debug("Translate data from Fiware...  ");
 		         FIWAREv2Translator translator2 = new FIWAREv2Translator();
 		         Model transformedModel = translator2.toJenaModelTransformed(body);
 		
 		         // Create Inter-IoT message
 		 	     platformResponse = createObservationMessage(transformedModel);
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -72,13 +71,11 @@ public class MWTranslator {
             
 	         try{
 		         String body = request.body();
-		         logger.debug("Translate data from inter-IoT to Fiware...  " + body);
+		         logger.debug("Translate data from inter-IoT to Fiware...  ");
 		         FIWAREv2Translator translator = new FIWAREv2Translator();
 		         Message message = new Message(body);
 		         // Translate JSON-LD message to Fiware format
 		         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
-		         
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -101,13 +98,12 @@ public class MWTranslator {
 	         try{
 		         // Transform data to JSON-LD
 		         String event = request.body();
-		         logger.debug("Translate data from universAAL...  " + event);
+		         logger.debug("Translate data from universAAL...  ");
 		 	     Model eventModel = ModelFactory.createDefaultModel();
 		 	     eventModel.read(new ByteArrayInputStream(event.getBytes()), null, "TURTLE");
 		 	     
 		 	     // Create Inter-IoT message
 		 	     platformResponse = createObservationMessage(eventModel);
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -126,7 +122,7 @@ public class MWTranslator {
             
 	         try{
 		         String body = request.body();
-		         logger.debug("Translate data from inter-IoT to universAAL...  " + body);
+		         logger.debug("Translate data from inter-IoT to universAAL...  ");
 		         Message message = new Message(body);
 		         
 		         // Translate JSON-LD message to universAAL format
@@ -135,8 +131,6 @@ public class MWTranslator {
 		     	 event.write(turtle, "TURTLE");
 		     	 platformResponse = turtle.toString();
 		     	 turtle.close();
-		         
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -159,13 +153,12 @@ public class MWTranslator {
 	         try{
 				 // Translate data to JSON-LD
 		         String body = request.body();
-		         logger.debug("Translate data from SOFIA2...  " + body);
+		         logger.debug("Translate data from SOFIA2...  ");
 		         Sofia2Translator translator = new Sofia2Translator();
 		         Model transformedModel = translator.toJenaModelTransformed(body);
 		
 		         // Create Inter-IoT message
 		 	     platformResponse = createObservationMessage(transformedModel);
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -184,14 +177,12 @@ public class MWTranslator {
             
 	         try{
 		         String body = request.body();
-		         logger.debug("Translate data from inter-IoT to SOFIA2...  " + body);
+		         logger.debug("Translate data from inter-IoT to SOFIA2...  ");
 		         
 		         Sofia2Translator translator = new Sofia2Translator();
 		         Message message = new Message(body);
 		         // Translate JSON-LD message to SOFIA2 format
 		         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
-		         
-		         System.out.println(platformResponse);
 		
 	         } catch(Exception e){
 	        	 response.status(400);
@@ -234,7 +225,7 @@ public class MWTranslator {
         
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode jsonMessage = (ObjectNode) mapper.readTree(callbackMessage.serializeToJSONLD());
-        ObjectNode context = (ObjectNode) jsonMessage.get("@context");
+//        ObjectNode context = (ObjectNode) jsonMessage.get("@context");
         // TODO: to use @vocab instead of msg, replace also all "msg:XXX" tags by "InterIoT:message/XXX"
 //        context.remove("msg");
 //        context.put("@vocab", "http://inter-iot.eu/message/");
