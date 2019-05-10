@@ -18,7 +18,7 @@ docker build -t giantswarm/sparkexample .
 docker run -d -p 4568:4568 giantswarm/sparkexample
 
 curl -X POST \
-  http://localhost:4568/translate/fiware \
+  http://localhost:4568/fiware/translate \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -H 'postman-token: d220cf92-f012-9b8e-5fa4-97d826e2db5a' \
@@ -44,18 +44,18 @@ curl -X POST \
 
 TRANSLATION TO INTER-IOT FORMAT:
 
-* POST http://localhost:4568/translate/fiware
+* POST http://localhost:4568/fiware/translate
 
-* POST http://localhost:4568/translate/sofia
+* POST http://localhost:4568/sofia/translate
 
-* POST http://localhost:4568/translate/universaal
+* POST http://localhost:4568/universaal/translate
 
 
 
 TRANSLATION FROM INTER-IOT FORMAT:
 
-* POST http://localhost:4568/formatx/fiware
+* POST http://localhost:4568/fiware/formatx
 
-* POST http://localhost:4568/formatx/sofia
+* POST http://localhost:4568/sofia/formatx
 
-* POST http://localhost:4568/formatx/universaal
+* POST http://localhost:4568/universaal/formatx

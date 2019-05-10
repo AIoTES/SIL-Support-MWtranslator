@@ -40,7 +40,7 @@ public class MWTranslator {
         // FIWARE
         
         // Translate Fiware data to intermw JSON-LD
-        spark.post("translate/fiware", (request, response) -> {
+        spark.post("fiware/translate", (request, response) -> {
         	
             String platformResponse="";
             
@@ -65,7 +65,7 @@ public class MWTranslator {
         });
         
         // Translate from inter-IoT JSON-LD to Fiware
-        spark.post("formatx/fiware", (request, response) -> {
+        spark.post("fiware/formatx", (request, response) -> {
         	
             String platformResponse="";
             
@@ -91,7 +91,7 @@ public class MWTranslator {
         // UNIVERSAAL
         
         // Translate universAAL data to intermw JSON-LD
-        spark.post("translate/universaal", (request, response) -> {	
+        spark.post("universaal/translate", (request, response) -> {	
         	
             String platformResponse="";
             
@@ -116,7 +116,7 @@ public class MWTranslator {
         });
         
         // Translate from inter-IoT JSON-LD to universAAL
-        spark.post("formatx/universaal", (request, response) -> {
+        spark.post("universaal/formatx", (request, response) -> {
         	
             String platformResponse="";
             
@@ -146,7 +146,7 @@ public class MWTranslator {
         // SOFIA2
         
         // Translate SOFIA2 data to intermw JSON-LD
-        spark.post("translate/sofia", (request, response) -> {
+        spark.post("sofia/translate", (request, response) -> {
         	
             String platformResponse="";
             
@@ -171,7 +171,7 @@ public class MWTranslator {
         });
         
         // Translate from inter-IoT JSON-LD to SOFIA2
-        spark.post("formatx/sofia", (request, response) -> {
+        spark.post("sofia/formatx", (request, response) -> {
         	
             String platformResponse="";
             
