@@ -16,4 +16,4 @@ ADD src /code/src
 RUN ["mvn", "clean", "compile", "assembly:single"]
 
 EXPOSE 4568
-CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "/code/target/MWTranslator-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]
+CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "/code/target/MWTranslator-0.0.2-SNAPSHOT-jar-with-dependencies.jar"]

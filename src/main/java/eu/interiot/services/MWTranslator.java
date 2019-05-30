@@ -29,6 +29,11 @@ public class MWTranslator {
     private Service spark;
     private final Logger logger = LoggerFactory.getLogger(MWTranslator.class);
     
+    private final String FIWARE = "http://inter-iot.eu/FIWARE";
+    private final String SOFIA = "http://inter-iot.eu/sofia2";
+    private final String SOFIA_GAL = "http://inter-iot.eu/sofia2Gal";
+    private final String UNIVERSAAL = "http://inter-iot.eu/UniversAAL";
+    
     public MWTranslator(int port) {
         this.port = port;
     }
@@ -87,6 +92,15 @@ public class MWTranslator {
 	         return platformResponse;
         });
         
+        // Get platform type label for Fiware
+        spark.get("fiware/type", (request, response) -> {
+        	
+            String types = "{\"types\":[\"" + FIWARE + "\"]}";
+                
+	        response.header("Content-Type", "application/json;charset=UTF-8");
+	        response.status(200);
+	        return types;
+        });
         
         // UNIVERSAAL
         
@@ -142,6 +156,15 @@ public class MWTranslator {
 	         return platformResponse;
         });
         
+        // Get platform type label for universAAL
+        spark.get("universaal/type", (request, response) -> {
+        	
+            String types = "{\"types\":[\"" + UNIVERSAAL + "\"]}";
+                
+	        response.header("Content-Type", "application/json;charset=UTF-8");
+	        response.status(200);
+	        return types;
+        });
         
         // SOFIA2
         
@@ -193,7 +216,17 @@ public class MWTranslator {
 	         response.status(200);
 	         return platformResponse;
         });
-
+        
+        // Get platform type label for SOFIA2
+        spark.get("sofia/type", (request, response) -> {
+        	
+            String types = "{\"types\":[\"" + SOFIA + "\",\"" + SOFIA_GAL + "\"]}";
+                
+	        response.header("Content-Type", "application/json;charset=UTF-8");
+	        response.status(200);
+	        return types;
+        });
+        
     }
 
     public void stop() {

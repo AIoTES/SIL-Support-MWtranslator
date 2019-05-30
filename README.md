@@ -7,15 +7,15 @@
 mvn clean compile assembly:single
 
 
-java -jar target\MWTranslator-0.0.1-SNAPSHOT-jar-with-dependencies.jar {TCP port}
+java -jar target\MWTranslator-0.0.2-SNAPSHOT-jar-with-dependencies.jar {TCP port}
 
 
 # Docker
 
 
-docker build -t giantswarm/sparkexample .
+docker build -t docker-activage.satrd.es/syntactic-translator:0.0.1 .
 
-docker run -d -p 4568:4568 giantswarm/sparkexample
+docker run -d -p 4568:4568 docker-activage.satrd.es/syntactic-translator:0.0.1
 
 curl -X POST \
   http://localhost:4568/fiware/translate \
@@ -59,3 +59,13 @@ TRANSLATION FROM INTER-IOT FORMAT:
 * POST http://localhost:4568/sofia/formatx
 
 * POST http://localhost:4568/universaal/formatx
+
+
+
+GET ASSOCIATED PLATFORM TYPES:
+
+* GET http://localhost:4568/fiware/type
+
+* GET http://localhost:4568/sofia/type
+
+* GET http://localhost:4568/universaal/type
