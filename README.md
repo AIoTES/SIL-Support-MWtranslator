@@ -15,7 +15,7 @@ java -jar target\MWTranslator-0.0.2-SNAPSHOT-jar-with-dependencies.jar {TCP port
 
 docker build -t docker-activage.satrd.es/syntactic-translator:0.0.1 .
 
-docker run -d -p 4568:4568 docker-activage.satrd.es/syntactic-translator:0.0.1
+docker run -d -p 4568:4568 --name syntactic-translator docker-activage.satrd.es/syntactic-translator:0.0.1
 
 curl -X POST \
   http://localhost:4568/fiware/translate \
