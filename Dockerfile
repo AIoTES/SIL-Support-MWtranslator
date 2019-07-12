@@ -12,4 +12,4 @@ ADD src /code/src
 RUN ["mvn", "clean", "compile", "assembly:single"]
 
 EXPOSE 4568
-CMD ["java", "-jar", "/code/target/MWTranslator-0.0.2-SNAPSHOT-jar-with-dependencies.jar"]
+CMD ["java", "-jar", "/code/target/MWTranslator-0.0.3-SNAPSHOT-jar-with-dependencies.jar"]

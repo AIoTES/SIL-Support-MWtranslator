@@ -19,6 +19,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import spark.Service;
 
@@ -48,19 +53,41 @@ public class MWTranslator {
         spark.post("fiware/translate", (request, response) -> {
         	
             String platformResponse="";
+            FIWAREv2Translator translator2 = new FIWAREv2Translator();
             
 	         try{
 				 // Translate data to JSON-LD
 		         String body = request.body();
 		         logger.debug("Translate data from Fiware...  ");
-		         FIWAREv2Translator translator2 = new FIWAREv2Translator();
-		         Model transformedModel = translator2.toJenaModelTransformed(body);
-		
-		         // Create Inter-IoT message
-		 	     platformResponse = createObservationMessage(transformedModel);
+		         
+		         JsonParser parser = new JsonParser();
+		         JsonElement element = parser.parse(body);
+		         		         
+		         if(element instanceof JsonArray){
+		        	// Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Model transformedModel = translator2.toJenaModelTransformed(input.get(i).getAsJsonObject().toString());
+				     		
+				         // Create Inter-IoT message
+		        		 String observation = createObservationMessage(transformedModel);
+		        		 // Add message to output array
+				 	     output.add(parser.parse(observation).getAsJsonObject());
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		         }else{
+		        	// Single element translation
+		        	 Model transformedModel = translator2.toJenaModelTransformed(body);
+		     		
+			         // Create Inter-IoT message
+			 	     platformResponse = createObservationMessage(transformedModel);
+		         }            
 		
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
 	            
@@ -78,12 +105,34 @@ public class MWTranslator {
 		         String body = request.body();
 		         logger.debug("Translate data from inter-IoT to Fiware...  ");
 		         FIWAREv2Translator translator = new FIWAREv2Translator();
-		         Message message = new Message(body);
-		         // Translate JSON-LD message to Fiware format
-		         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
-		
+		         
+		         JsonParser parser = new JsonParser();
+		         JsonElement element = parser.parse(body);
+		         		         
+		         if(element instanceof JsonArray){
+		        	// Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Message message = new Message(input.get(i).getAsJsonObject().toString());
+		        		 String translatedData = translator.toFormatX(message.getPayload().getJenaModel());	
+				         
+		        		 // Add message to output array
+				 	     output.add(parser.parse(translatedData).getAsJsonObject());
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		        	 
+		         }else{
+		        	// Single element translation
+		        	 Message message = new Message(body);
+			         // Translate JSON-LD message to Fiware format
+			         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
+		         }
+		        		
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
 	            
@@ -113,14 +162,45 @@ public class MWTranslator {
 		         // Transform data to JSON-LD
 		         String event = request.body();
 		         logger.debug("Translate data from universAAL...  ");
-		 	     Model eventModel = ModelFactory.createDefaultModel();
-		 	     eventModel.read(new ByteArrayInputStream(event.getBytes()), null, "TURTLE");
-		 	     
-		 	     // Create Inter-IoT message
-		 	     platformResponse = createObservationMessage(eventModel);
+		         
+		         JsonParser parser = new JsonParser();
+		         
+		         try{
+		        	 JsonElement element = parser.parse(event);
+		        	 // Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Model eventModel = ModelFactory.createDefaultModel();
+				 	     eventModel.read(new ByteArrayInputStream(input.get(i).getAsString().getBytes()), null, "TURTLE");
+				 	     
+				         // Create Inter-IoT message
+		        		 String observation = createObservationMessage(eventModel);
+		        		 // Add message to output array
+				 	     output.add(parser.parse(observation).getAsJsonObject());
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		         }catch(com.google.gson.JsonSyntaxException ex){
+		        	// Single element translation
+		        	 Model eventModel = ModelFactory.createDefaultModel();
+			 	     eventModel.read(new ByteArrayInputStream(event.getBytes()), null, "TURTLE");
+			 	     
+			 	     // Create Inter-IoT message
+			 	     platformResponse = createObservationMessage(eventModel);
+		         }
+		         
+		         		         
+//		         if(element instanceof JsonArray){
+//		        	// Array translation
+//		        	
+//		         }else{
+//		        	
+//		         }
 		
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
                 
@@ -137,21 +217,50 @@ public class MWTranslator {
 	         try{
 		         String body = request.body();
 		         logger.debug("Translate data from inter-IoT to universAAL...  ");
-		         Message message = new Message(body);
 		         
-		         // Translate JSON-LD message to universAAL format
-		         Model event = message.getPayload().getJenaModel();
-		     	 Writer turtle = new StringWriter();
-		     	 event.write(turtle, "TURTLE");
-		     	 platformResponse = turtle.toString();
-		     	 turtle.close();
-		
+		         JsonParser parser = new JsonParser();
+		         JsonElement element = parser.parse(body);
+		         		         
+		         if(element instanceof JsonArray){
+		        	// Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Message message = new Message(input.get(i).getAsJsonObject().toString());
+				         
+				         // Translate JSON-LD message to universAAL format
+				         Model event = message.getPayload().getJenaModel();
+				         Writer turtle = new StringWriter();
+				     	 event.write(turtle, "TURTLE");
+				     	 platformResponse = turtle.toString();
+		        		 String translatedData = turtle.toString();	
+		        		 turtle.close();
+		        		 
+		        		 // Add message to output array
+				 	     output.add(translatedData);
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		        	 response.header("Content-Type", "application/json;charset=UTF-8");
+		         }else{
+		        	// Single element translation
+		        	 Message message = new Message(body);
+			         
+			         // Translate JSON-LD message to universAAL format
+			         Model event = message.getPayload().getJenaModel();
+			         Writer turtle = new StringWriter();
+			     	 event.write(turtle, "TURTLE");
+			     	 platformResponse = turtle.toString();
+			     	 turtle.close();
+			     	 response.header("Content-Type", "text/plain;charset=UTF-8");
+		         }
+		        	
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
-	            
-	         response.header("Content-Type", "text/plain;charset=UTF-8");
+	         
 	         response.status(200);
 	         return platformResponse;
         });
@@ -178,13 +287,35 @@ public class MWTranslator {
 		         String body = request.body();
 		         logger.debug("Translate data from SOFIA2...  ");
 		         Sofia2Translator translator = new Sofia2Translator();
-		         Model transformedModel = translator.toJenaModelTransformed(body);
-		
-		         // Create Inter-IoT message
-		 	     platformResponse = createObservationMessage(transformedModel);
-		
+		         
+		         JsonParser parser = new JsonParser();
+		         JsonElement element = parser.parse(body);
+		         		         
+		         if(element instanceof JsonArray){
+		        	// Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Model transformedModel = translator.toJenaModelTransformed(input.get(i).getAsJsonObject().toString());
+				     		
+				         // Create Inter-IoT message
+		        		 String observation = createObservationMessage(transformedModel);
+		        		 // Add message to output array
+				 	     output.add(parser.parse(observation).getAsJsonObject());
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		         }else{
+		        	// Single element translation
+		        	 Model transformedModel = translator.toJenaModelTransformed(body);
+		     		
+			         // Create Inter-IoT message
+			 	     platformResponse = createObservationMessage(transformedModel);
+		         }
+		         	
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
 	            
@@ -201,14 +332,35 @@ public class MWTranslator {
 	         try{
 		         String body = request.body();
 		         logger.debug("Translate data from inter-IoT to SOFIA2...  ");
-		         
 		         Sofia2Translator translator = new Sofia2Translator();
-		         Message message = new Message(body);
-		         // Translate JSON-LD message to SOFIA2 format
-		         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
+		         
+		         JsonParser parser = new JsonParser();
+		         JsonElement element = parser.parse(body);
+		         		         
+		         if(element instanceof JsonArray){
+		        	// Array translation
+		        	 Gson gson = new Gson();
+		        	 JsonArray input = element.getAsJsonArray();
+		        	 JsonArray output = new JsonArray();
+		        	 for(int i=0; i<input.size(); i++){
+		        		 Message message = new Message(input.get(i).getAsJsonObject().toString());
+		        		 String translatedData = translator.toFormatX(message.getPayload().getJenaModel());	
+				         
+		        		 // Add message to output array
+				 	     output.add(parser.parse(translatedData).getAsJsonObject());
+		        	 }
+		        	 platformResponse = gson.toJson(output);
+		        	 
+		         }else{
+		        	// Single element translation
+		        	 Message message = new Message(body);
+			         // Translate JSON-LD message to SOFIA2 format
+			         platformResponse = translator.toFormatX(message.getPayload().getJenaModel());
+		         }
 		
 	         } catch(Exception e){
 	        	 response.status(400);
+	        	 e.printStackTrace();
 	             return e.getMessage();
 	         }
 	            
