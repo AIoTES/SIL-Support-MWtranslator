@@ -9,7 +9,7 @@ Copyright 2020 Universitat Politècnica de València
 
 I. Included Software
 
- - Fiware Bridge translator (eu.interiot.translators.syntax.FIWARE - no url defined), distributed under Apache 2.0 license
+ - Software developed by Systems Research Institute Polish Academy of Sciences for the INTER-IoT project, licensed under Apache License, Version 2.0
 
 
 II. Used Software
@@ -21,18 +21,20 @@ This product uses the following software with corresponding licenses:
         jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.9.5 - http://github.com/FasterXML/jackson) distributed under Apache License, Version 2.0
         dexx (com.github.andrewoma.dexx:collection:0.7 - https://github.com/andrewoma/dexx) distributed under MIT License
         JSONLD Java :: Core (com.github.jsonld-java:jsonld-java:0.11.1 - http://github.com/jsonld-java/jsonld-java/jsonld-java/) distributed under BSD 3-clause
+        FindBugs-jsr305 (com.google.code.findbugs:jsr305:3.0.2 - http://findbugs.sourceforge.net/) distributed under Apache License, Version 2.0
         Gson (com.google.code.gson:gson:2.8.2 - https://github.com/google/gson/gson) distributed under Apache License, Version 2.0
+        Guava: Google Core Libraries for Java (com.google.guava:guava:21.0 - https://github.com/google/guava/guava) distributed under Apache License, Version 2.0
         Spark (com.sparkjava:spark-core:2.7.2 - http://www.sparkjava.com) distributed under Apache License, Version 2.0
         Apache Commons CLI (commons-cli:commons-cli:1.4 - http://commons.apache.org/proper/commons-cli/) distributed under Apache License, Version 2.0
         Apache Commons Codec (commons-codec:commons-codec:1.9 - http://commons.apache.org/proper/commons-codec/) distributed under Apache License, Version 2.0
         Apache Commons IO (commons-io:commons-io:2.5 - http://commons.apache.org/proper/commons-io/) distributed under Apache License, Version 2.0
         Apache Commons Logging (commons-logging:commons-logging:1.2 - http://commons.apache.org/proper/commons-logging/) distributed under Apache License, Version 2.0
-        Message (eu.inter-iot.message:Message:0.9-SNAPSHOT - no url defined) distributed under Apache License, Version 2.0
+        Message (eu.inter-iot.message:Message:1.0 - https://github.com/INTER-IoT/Message) distributed under Apache License, Version 2.0
         Syntactic-translator (eu.inter-iot.translators:syntactic-translators:1.0 - no url defined) distributed under Eclipse Public License - Version 1.0
-        Middleware Commons COMM API (eu.interiot.intermw:comm.commons.api:2.3.0 - no url defined) distributed under Eclipse Public License - Version 1.0
-        Middleware broker API (eu.interiot.intermw:mw.comm.broker.api:2.3.0 - no url defined) distributed under Eclipse Public License - Version 1.0
-        Middleware Commons API (eu.interiot.intermw:mw.commons.api:2.3.0 - no url defined) distributed under Eclipse Public License - Version 1.0
-        Middleware Commons Implementation (eu.interiot.intermw:mw.commons.impl:2.3.0 - no url defined) distributed under Eclipse Public License - Version 1.0
+        Middleware Commons COMM API (eu.interiot.intermw:comm.commons.api:2.4.0-SNAPSHOT - https://github.com/INTER-IoT/intermw/comm/comm.commons/comm.commons.api) distributed under Apache License, Version 2.0
+        Middleware broker API (eu.interiot.intermw:mw.comm.broker.api:2.4.0-SNAPSHOT - https://github.com/INTER-IoT/intermw/comm/mw.comm.broker/mw.comm.broker.api) distributed under Apache License, Version 2.0
+        Middleware Commons API (eu.interiot.intermw:mw.commons.api:2.4.0-SNAPSHOT - https://github.com/INTER-IoT/intermw/mw.commons/mw.commons.api) distributed under Apache License, Version 2.0
+        Middleware Commons Implementation (eu.interiot.intermw:mw.commons.impl:2.4.0-SNAPSHOT - https://github.com/INTER-IoT/intermw/mw.commons/mw.commons.impl) distributed under Apache License, Version 2.0
         swagger-annotations (io.swagger:swagger-annotations:1.5.19 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations) distributed under Apache License, Version 2.0
         Java Servlet API (javax.servlet:javax.servlet-api:3.1.0 - http://servlet-spec.java.net) distributed under CDDL + GPLv2 with classpath exception
         JUnit (junit:junit:4.12 - http://junit.org) distributed under Eclipse Public License - Version 1.0
@@ -73,6 +75,8 @@ This product uses the following software with corresponding licenses:
         Jetty :: Websocket :: Server (org.eclipse.jetty.websocket:websocket-server:9.4.8.v20171121 - http://www.eclipse.org/jetty/websocket-server) distributed under Apache License, Version 2.0 or Eclipse Public License - Version 1.0
         Jetty :: Websocket :: Servlet Interface (org.eclipse.jetty.websocket:websocket-servlet:9.4.8.v20171121 - http://www.eclipse.org/jetty/websocket-servlet) distributed under Apache License, Version 2.0 or Eclipse Public License - Version 1.0
         Hamcrest Core (org.hamcrest:hamcrest-core:1.3 - https://github.com/hamcrest/JavaHamcrest/hamcrest-core) distributed under BSD 3-clause
+        Javassist (org.javassist:javassist:3.21.0-GA - http://www.javassist.org/) distributed under Apache License, Version 2.0 or LGPL 2.1 or MPL 1.1
+        Reflections (org.reflections:reflections:0.9.11 - http://github.com/ronmamo/reflections) distributed under BSD 3-clause or WTFPL
         JCL 1.2 implemented over SLF4J (org.slf4j:jcl-over-slf4j:1.7.25 - http://www.slf4j.org) distributed under MIT License
         SLF4J API Module (org.slf4j:slf4j-api:1.7.5 - http://www.slf4j.org) distributed under MIT License
         SLF4J Simple Binding (org.slf4j:slf4j-simple:1.7.5 - http://www.slf4j.org) distributed under MIT License

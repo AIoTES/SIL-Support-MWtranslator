@@ -9,7 +9,7 @@ Copyright 2020 Universitat Politècnica de València
 
 I. Included Software
 
- - Fiware Bridge translator (eu.interiot.translators.syntax.FIWARE - no url defined), distributed under Apache 2.0 license
+ - Software developed by Systems Research Institute Polish Academy of Sciences for the INTER-IoT project, licensed under Apache License, Version 2.0
 
 
 II. Used Software
