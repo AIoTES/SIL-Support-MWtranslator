@@ -8,7 +8,7 @@ This component is used by the Data Lake to perform the syntactic conversion of t
 
 ## Getting started
 
-This component is deployed as part of the Data Lake stack. The syntactic translation functions are called automatically by the [Data Lake Query Execution service](https://git.activageproject.eu/Data_Analytics/DL-Query_execution) if the proper platform type has been specified in the [service registry prototype](https://git.activageproject.eu/Data_Analytics/DL-Query_execution/wiki/Service+Registry+prototype).
+This component is deployed as part of the Data Lake stack. The syntactic translation functions are called automatically by the [Data Lake Query Execution service](https://github.com/AIoTES/DataLayer-DataLake-QueryExecution) if the proper platform type has been specified in the [service registry prototype](https://github.com/AIoTES/DataLayer-DataLake-QueryExecution/wiki/Service-Registry-prototype).
 
 
 ### API
