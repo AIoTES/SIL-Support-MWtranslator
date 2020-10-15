@@ -71,7 +71,7 @@ curl -X POST \
 
 Build docker image:
 
-`docker build -t docker-activage.satrd.es/syntactic-translator:<version> .`
+`docker build -t aiotesdocker/sil-support-mwtranslator:<version> .`
 
 
 
@@ -89,16 +89,16 @@ Run in JVM:
 
 You can run locally the Docker image using:
 
-`docker run -d -p 4568:4568 --name syntactic-translator docker-activage.satrd.es/syntactic-translator:<version>`
+`docker run -d -p 4568:4568 --name syntactic-translator aiotesdocker/sil-support-mwtranslator:<version>`
 
 
 Default TCP port for the REST API: 4568
 
 
 ## Further information
-**Docker image versions**
-* 0.0.1: single message translation
-* 0.0.2: array or single message translation
+
+[Available Docker images](https://hub.docker.com/r/aiotesdocker/sil-support-mwtranslator)
+
 
 ## License
 The syntactic translation web service is licensed under [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
